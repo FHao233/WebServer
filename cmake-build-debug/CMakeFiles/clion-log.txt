@@ -1,0 +1,4 @@
+/home/chao/.cache/JetBrains/RemoteDev/dist/02a0cb6fe870c_CLion-2022.2.5/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/chao/.cache/JetBrains/RemoteDev/dist/02a0cb6fe870c_CLion-2022.2.5/bin/ninja/linux/ninja -G Ninja -S /home/chao/cpp/WebServer -B /home/chao/cpp/WebServer/cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/chao/cpp/WebServer/cmake-build-debug
