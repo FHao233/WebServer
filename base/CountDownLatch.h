@@ -8,13 +8,13 @@
 class CountDownLatch : noncopyable {
  public:
   explicit CountDownLatch(int count);
-  void wait();
-  void countDown();
+  void wait();// 等待计数器归零
+  void countDown(); // 计数器减一
 
  private:
-  mutable MutexLock mutex_;
-  Condition condition_;
-  int count_;
+  mutable MutexLock mutex_; // 可变的互斥锁对象
+  Condition condition_;// 条件变量对象
+  int count_;// 计数器
 };
 
 #endif
