@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.23)
-project(WebServer)
+cmake_minimum_required(VERSION 3.0.0)
+project(WebSever VERSION 0.1.0)
 
-set(CMAKE_CXX_STANDARD 11)
+include(CTest)
+enable_testing()
 
-include_directories(.)
+add_executable(WebSever main.cpp)
 
-add_executable(WebServer
-        Epoll.cpp Epoll.h Channel.cpp Channel.h HttpData.cpp HttpData.h EventLoop.cpp EventLoop.h base/Thread.cpp base/Thread.h base/noncopyable.h base/CurrentThread.h)
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)

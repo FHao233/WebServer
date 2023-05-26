@@ -9,7 +9,8 @@
 #include <functional>
 #include <memory>
 #include "Channel.h"
-
+#include "Epoll.h"
+#include "base/CurrentThread.h"
 class EventLoop {
 
     // 初始化poller, event_fd，给 event_fd 注册到 epoll 中并注册其事件处理回调
@@ -50,11 +51,11 @@ private:
     void WakeUp(); // 异步唤醒SubLoop的epoll_wait(向event_fd中写⼊数据)
     void PerformPendingFunctions(); // 执⾏正在等待的函数(SubLoop注册EpollAdd连接套接字以及绑定事件的函数)
 private:
-    std::shared_ptr<Poller> poller_; // io多路复⽤ 分发器
+    std::shared_ptr<Epoll> poller_; // io多路复⽤ 分发器
     int event_fd_; //⽤于异步唤醒 SubLoop 的 Loop 函数中的 Poll(epoll_wait因为还没有注册fd会⼀直阻塞)
     std::shared_ptr<Channel> wakeup_channel_; // ⽤于异步唤醒的 channel
     pid_t thread_id_; // 线程id
-    mutable locker::MutexLock mutex_;
+    // mutable locker::MutexLock mutex_;
     std::vector<Function> pending_functions_; // 正在等待处理的函数
     bool is_stop_; // 是否停⽌事件循环
     bool is_looping_; // 是否正在事件循环
