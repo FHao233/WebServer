@@ -1,9 +1,0 @@
-cmake_minimum_required(VERSION 3.21)
-project(WebServer)
-
-set(CMAKE_CXX_STANDARD 11)
-
-include_directories(.)
-
-add_executable(WebServer
-        Epoll.cpp Epoll.h Channel.cpp Channel.h HttpData.cpp HttpData.h EventLoop.cpp EventLoop.h base/Thread.cpp base/Thread.h base/noncopyable.h base/CurrentThread.h)

@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
-AppendFile::AppendFile(std::string filename) {
+AppendFile::AppendFile(std::string filename): fp_(fopen(filename.c_str(), "ae")){
   // 构造函数,打开指定的 filename 文件,以追加模式打开。
   // 同时设置文件流的缓冲区,以提高写入效率。
-  setbuffer(fp_, buffer_, sizeof buffer_); // 这行代码是为文件流 fp_ 设置缓冲区,缓冲区为 buffer_,大小为 sizeof buffer_ 字节。
+  setbuffer(fp_, buffer_, sizeof(buffer_)); // 这行代码是为文件流 fp_ 设置缓冲区,缓冲区为 buffer_,大小为 sizeof buffer_ 字节。
 }
 AppendFile::~AppendFile() {
   // 析构函数,关闭文件流,释放资源。

@@ -1,5 +1,5 @@
 #include "LogStream.h"
-
+#include <algorithm>
 const char digits[] =
     "9876543210123456789";  // 数字字符数组，用于将数字转换为字符串
 const char* zero = digits + 9;  // 数字字符数组中0的位置
