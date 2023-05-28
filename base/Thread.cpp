@@ -116,7 +116,7 @@ void Thread::start() {
   }
 }
 
-int Thread::join() {
+int Thread::join() {// 等待线程结束
   joined_ = true;  // 标记线程已经被 join
   return pthread_join(
       pthreadId_,
