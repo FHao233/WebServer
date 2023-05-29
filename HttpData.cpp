@@ -553,8 +553,15 @@ AnalysisState HttpData::analysisRequest() {
     // echo test
     if (fileName_ == "hello") {  // 如果请求的是/hello
                                  // 返回Hello World
-      outBuffer_ =
-          "HTTP/1.1 200 OK\r\nContent-type: text/plain\r\n\r\nHello World";
+                                 // outBuffer_ =
+      //     "HTTP/1.1 200 OK\r\nContent-type: text/plain\r\n\r\nHello
+      //     World11111111111111111111111111111";
+      header += "Content-Type:  text/plain\r\n";
+      string res = "Hello World";
+      header += "Content-Length: " + std::to_string(res.length()) + "\r\n";
+      header += "\r\n";  // 头部结束
+      outBuffer_ += header;
+      outBuffer_ += res;
       return ANALYSIS_SUCCESS;
     }
     // 如果请求的是/favicon.ico

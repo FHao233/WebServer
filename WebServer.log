@@ -1,0 +1,90 @@
+2023-05-29 10:48:57
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 10:49:07
+New connection from 172.26.144.1:4339 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 10:49:07
+Request: GET /hello.html HTTP/1.1
+User-Agent: Apifox/1.0.0 (https://www.apifox.cn)
+Accept: */*
+Host: 172.26.153.103:8081
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 10:49:25
+New connection from 172.26.144.1:4370 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 10:49:25
+Request: GET /hello HTTP/1.1
+User-Agent: Apifox/1.0.0 (https://www.apifox.cn)
+Accept: */*
+Host: 172.26.153.103:8081
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 10:55:32
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 10:55:45
+New connection from 127.0.0.1:38762 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 10:55:45
+Request: GET /hello HTTP/1.1
+Host: 127.0.0.1:8081
+User-Agent: curl/7.81.0
+Accept: */*
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 10:58:36
+New connection from 127.0.0.1:37166 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 10:58:36
+Request: GET /hello.html HTTP/1.1
+Host: 127.0.0.1:8081
+User-Agent: curl/7.81.0
+Accept: */*
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 11:03:28
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 11:03:34
+New connection from 127.0.0.1:59528 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 11:03:34
+Request: GET /hello HTTP/1.1
+Host: 127.0.0.1:8081
+User-Agent: curl/7.81.0
+Accept: */*
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 11:14:28
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 11:15:24
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 11:15:40
+New connection from 127.0.0.1:54548 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 11:15:40
+Request: GET /favicon.ico HTTP/1.1
+Host: 127.0.0.1:8081
+User-Agent: curl/7.81.0
+Accept: */*
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 11:21:24
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 11:22:46
+_PTHREADS is not defined ! -- /home/fhao/cpp/WebSever/main.cpp:50
+2023-05-29 11:22:51
+New connection from 172.26.144.1:12679 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 11:22:51
+New connection from 172.26.144.1:12680 -- /home/fhao/cpp/WebSever/Server.cpp:46
+2023-05-29 11:22:51
+Request: GET /hello HTTP/1.1
+Host: 172.26.153.103:8081
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-GB;q=0.8,en;q=0.7
+
+ -- /home/fhao/cpp/WebSever/HttpData.cpp:187
+2023-05-29 11:23:59
+Request:  -- /home/fhao/cpp/WebSever/HttpData.cpp:187

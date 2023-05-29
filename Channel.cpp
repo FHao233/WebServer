@@ -12,8 +12,8 @@ Channel::~Channel() {
   // loop_->poller_->epoll_del(fd, events_);
   // close(fd_);
 }
-int Channel::get_fd() { return fd_; }
-void Channel::set_fd(int fd) { fd_ = fd; }
+// int Channel::get_fd() { return fd_; }
+// void Channel::set_fd(int fd) { fd_ = fd; }
 void Channel::HandleEvents()  //这段代码实现了 Channel 类的事件处理函数
                               //HandleEvents()，用于处理 epoll 监听到的事件。
 {

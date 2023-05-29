@@ -39,6 +39,9 @@ auto EventLoop::CreateEventfd() -> int {
 void EventLoop::HandleRead() {
   uint64_t one = 1;                                //占用8个字节
   ssize_t n = readn(event_fd_, &one, sizeof one);  //每次读取8个字节
+  if (n != sizeof one) {
+    LOG << "EventLoop::handleRead() reads " << n << " bytes instead of 8";
+  }
   wakeup_channel_->set_events(
       EPOLLIN |
       EPOLLET);  //将wakeup_channel_的事件类型设置为EPOLLIN |
@@ -80,6 +83,7 @@ EventLoop::EventLoop()
   wakeup_channel_->set_events(EPOLLIN | EPOLLET);
   wakeup_channel_->set_read_handler(std::bind(&EventLoop::HandleRead, this));
   wakeup_channel_->set_conn_handler(std::bind(&EventLoop::HandleConn, this));
+  poller_->epoll_add(wakeup_channel_, 0);
 }
 EventLoop::~EventLoop() {
   close(event_fd_);
@@ -102,6 +106,7 @@ void EventLoop::Loop() {
     PerformPendingFunctions();   // 执行待处理函数
     poller_->handleExpired();    // 处理超时的定时器
   }
+  is_looping_ = false;
 }
 // 当其他线程调用quit函数请求退出事件循环时，如果当前线程不是EventLoop所在的线程，
 // 那么EventLoop可能正在阻塞等待事件的到来，此时需要通过wakeup函数唤醒它，使其能够及时响应退出请求，停止事件循环并退出。
@@ -121,6 +126,9 @@ void EventLoop::RunInLoop(Function &&func) {
 }
 
 void EventLoop::QueueInLoop(Function &&func) {
-  MutexLockGuard lock(mutex_);
-  pending_functions_.emplace_back(std::move(func));
+  {
+    MutexLockGuard lock(mutex_);
+    pending_functions_.emplace_back(std::move(func));
+  }
+  if (!is_in_loop_thread() || is_calling_pending_functions_) WakeUp();
 }

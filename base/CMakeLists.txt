@@ -6,6 +6,7 @@ set(LIB_SRC
     Logger.cpp
     LogStream.cpp
     Thread.cpp
+    Timer.cpp
 )
 
 add_library(libserver_base ${LIB_SRC})

@@ -4,7 +4,6 @@
 
 #ifndef WEBSERVER_EPOLL_H
 #define WEBSERVER_EPOLL_H
-
 #include <sys/epoll.h>
 
 #include <memory>
@@ -15,9 +14,12 @@
 #include "HttpData.h"
 #include "base/Timer.h"
 /**
- * Poller 类的作⽤就是负责监听⽂件描述符事件是否触发以及返回发⽣事件的⽂件描述符以及具体事件。所以⼀个
-Poller 对象对应⼀个 IO 多路复⽤模块。在 muduo 中，⼀个 EventLoop 对应⼀个 Poller 。
+ * Poller
+类的作⽤就是负责监听⽂件描述符事件是否触发以及返回发⽣事件的⽂件描述符以及具体事件。所以⼀个
+Poller 对象对应⼀个 IO 多路复⽤模块。在 muduo 中，⼀个 EventLoop 对应⼀个 Poller
+。
 */
+
 class Epoll {
  public:
   ~Epoll();

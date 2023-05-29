@@ -2,20 +2,24 @@
 // Created by chao on 23-5-25.
 //
 
-#ifndef WEBSERVER_CHANNEL_H
-#define WEBSERVER_CHANNEL_H
-
+// #ifndef WEBSERVER_CHANNEL_H
+// #define WEBSERVER_CHANNEL_H
+#pragma once
+#include <sys/epoll.h>
+#include <sys/epoll.h>
 #include <functional>
 #include <memory>
-
-#include "EventLoop.h"
-#include "HttpData.h"
+#include <string>
+#include <unordered_map>
+#include "base/Timer.h"
 /**
  *  Channel 就是对 fd 事件的封装，包括注册它的事件以及回调。 EventLoop 通过调⽤
 Channel::handleEvent() 来执⾏ Channel 的读写事件。 Channel::handleEvent()
 的实现也⾮常简单，就 是⽐较已经发⽣的事件（由 Poller
 返回），来调⽤对应的回调函数（读、写、错误）。
 */
+class EventLoop;
+class HttpData;
 class Channel {
  public:
   typedef std::function<void()> EventCallBack;
@@ -34,7 +38,7 @@ class Channel {
 
   void HandleRead();    // 处理读事件的回调
   void HandleWrite();   // 处理写事件的回调
-  void HandleUpdate();  // 处理更新事件的回调
+  // void HandleUpdate();  // 处理更新事件的回调
   void HandleConn();
   void HandleError();  // 处理错误事件的回调
   int get_fd() { return fd_; }
@@ -81,7 +85,7 @@ class Channel {
   __uint32_t &getEvents() { return events_; }
 
   // int last_events();
-  bool update_last_events();
+  // bool update_last_events();
 
   __uint32_t getLastEvents() { return last_events_; }
   bool EqualAndUpdateLastEvents() {
@@ -105,6 +109,6 @@ class Channel {
   EventCallBack error_handler_;
   EventCallBack conn_handler_;
 };
-
 typedef std::shared_ptr<Channel> SP_Channel;
-#endif  // WEBSERVER_CHANNEL_H
+
+// #endif  // WEBSERVER_CHANNEL_H

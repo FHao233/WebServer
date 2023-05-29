@@ -12,7 +12,7 @@
 #include <sys/syscall.h>
 #include <sys/types.h>
 #include <unistd.h>
-
+#include <iostream>
 #include "CurrentThread.h"
 namespace CurrentThread {  // 命名空间 CurrentThread，用于存储当前线程的相关信息
 __thread int t_cachedTid = 0;  // 线程 ID 的缓存，使用 __thread 关键字保证程安全
@@ -111,8 +111,9 @@ void Thread::start() {
     started_ = false;  // 如果创建线程失败，则标记线程未启动
     delete data;       // 释放 ThreadData 对象
   } else {
-    assert(tid_ > 0);
+    // std::cout << tid_ << std::endl;
     latch_.wait();  // 等待新线程启动
+    assert(tid_ > 0);
   }
 }
 

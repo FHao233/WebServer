@@ -6,7 +6,6 @@
 #define WEBSERVER_EVENTLOOP_H
 
 #include <functional>
-#include <iostream>
 #include <memory>
 #include <vector>
 #include <assert.h>
@@ -16,6 +15,11 @@
 #include "base/CurrentThread.h"
 #include "base/Logger.h"
 #include "base/Thread.h"
+
+
+#include <iostream>
+using namespace std;
+// typedef std::shared_ptr<Channel> SP_Channel;
 class EventLoop {
  public:
   // 初始化poller, event_fd，给 event_fd 注册到 epoll 中并注册其事件处理回调
@@ -40,19 +44,19 @@ class EventLoop {
   void QueueInLoop(Function &&func);
 
   // 把fd和绑定的事件注册到epoll内核事件表
-  void PollerAdd(std::shared_ptr<Channel> channel, int timeout = 0) {
+  void PollerAdd(SP_Channel channel, int timeout = 0) {
     poller_->epoll_add(channel, timeout);
   }
   // 在epoll内核事件表修改fd所绑定的事件
-  void PollerMod(std::shared_ptr<Channel> channel, int timeout = 0) {
+  void PollerMod(SP_Channel channel, int timeout = 0) {
     poller_->epoll_mod(channel, timeout);
   }
   // 从epoll内核事件表中删除fd及其绑定的事件
-  void PollerDel(std::shared_ptr<Channel> channel) {
+  void PollerDel(SP_Channel channel) {
     poller_->epoll_del(channel);
   }
   // 只关闭连接(此时还可以把缓冲区数据写完再关闭)
-  void ShutDown(std::shared_ptr<Channel> channel) {
+  void ShutDown(SP_Channel channel) {
     shutDownWR(channel->get_fd());
   }
   bool is_in_loop_thread() const;
@@ -70,13 +74,13 @@ class EventLoop {
   void HandleConn();
 
  private:
-  std::shared_ptr<Epoll> poller_;  // io多路复⽤ 分发器
+  shared_ptr<Epoll> poller_;  // io多路复⽤ 分发器
   int event_fd_;  //⽤于异步唤醒 SubLoop 的 Loop 函数中的
                   // Poll(epoll_wait因为还没有注册fd会⼀直阻塞)
-  std::shared_ptr<Channel> wakeup_channel_;  // ⽤于异步唤醒的 channel
+  shared_ptr<Channel> wakeup_channel_;  // ⽤于异步唤醒的 channel
   pid_t thread_id_;                          // 线程id
   mutable MutexLock mutex_;
-  std::vector<Function> pending_functions_;  // 正在等待处理的函数
+  vector<Function> pending_functions_;  // 正在等待处理的函数
   bool is_stop_;                             // 是否停⽌事件循环
   bool is_looping_;                          // 是否正在事件循环
   bool is_event_handling_;                   // 是否正在处理事件

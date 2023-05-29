@@ -15,17 +15,17 @@ project(WebSever VERSION 0.1.0)
 # add_subdirectory(base)
 # add_subdirectory(tests)
 set(SRCS
-    # Channel.cpp
-    # Epoll.cpp
-    # EventLoop.cpp
-    # EventLoopThread.cpp
-    # EventLoopThreadPool.cpp
-    # HttpData.cpp
+    Channel.cpp
+    Epoll.cpp
+    EventLoop.cpp
+    EventLoopThread.cpp
+    EventLoopThreadPool.cpp
+    HttpData.cpp
     main.cpp
-    # Server.cpp
-    #ThreadPool.cpp
+    Server.cpp
+    # ThreadPool.cpp
     # Timer.cpp
-    # Util.cpp
+    Util.cpp
 )
 include_directories(${PROJECT_SOURCE_DIR}/base)
 
