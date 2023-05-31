@@ -56,3 +56,4 @@
 build
 .vscode
 cmake-build-debug
+resources
