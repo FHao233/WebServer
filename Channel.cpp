@@ -4,6 +4,16 @@
 
 #include "Channel.h"
 
+#include <unistd.h>
+#include <cstdlib>
+#include <iostream>
+
+#include <queue>
+
+#include "Epoll.h"
+#include "EventLoop.h"
+#include "Util.h"
+
 Channel::Channel(EventLoop *loop)
     : loop_(loop), events_(0), last_events_(0), fd_(0) {}
 Channel::Channel(EventLoop *loop, int fd)
@@ -12,8 +22,23 @@ Channel::~Channel() {
   // loop_->poller_->epoll_del(fd, events_);
   // close(fd_);
 }
-// int Channel::get_fd() { return fd_; }
-// void Channel::set_fd(int fd) { fd_ = fd; }
+void Channel::HandleRead() {
+  if (read_handler_) {
+    read_handler_();
+  }
+}
+
+void Channel::HandleWrite() {
+  if (write_handler_) {
+    write_handler_();
+  }
+}
+
+void Channel::HandleConn() {
+  if (conn_handler_) {
+    conn_handler_();
+  }
+}
 void Channel::HandleEvents()  //这段代码实现了 Channel 类的事件处理函数
                               //HandleEvents()，用于处理 epoll 监听到的事件。
 {
@@ -40,21 +65,4 @@ void Channel::HandleEvents()  //这段代码实现了 Channel 类的事件处理
     HandleWrite();
   }
   HandleConn();  // 最后调用 HandleConn() 处理连接事件。
-}
-void Channel::HandleRead() {
-  if (read_handler_) {
-    read_handler_();
-  }
-}
-
-void Channel::HandleWrite() {
-  if (write_handler_) {
-    write_handler_();
-  }
-}
-
-void Channel::HandleConn() {
-  if (conn_handler_) {
-    conn_handler_();
-  }
 }

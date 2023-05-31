@@ -24,7 +24,7 @@ set(SRCS
     main.cpp
     Server.cpp
     # ThreadPool.cpp
-    # Timer.cpp
+    Timer.cpp
     Util.cpp
 )
 include_directories(${PROJECT_SOURCE_DIR}/base)

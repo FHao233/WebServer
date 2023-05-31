@@ -1,16 +1,17 @@
 #include "Timer.h"
-
 #include <sys/time.h>
+#include <unistd.h>
+#include <queue>
 TimerNode::TimerNode(std::shared_ptr<HttpData> requestData, int timeout)
     : deleted_(false), SPHttpData(requestData) {
   struct timeval now;
-  gettimeofday(&now, nullptr); // 获取当前时间
+  gettimeofday(&now, NULL); // 获取当前时间
   // 以毫秒计
   (((now.tv_sec % 10000) * 1000) + (now.tv_usec / 1000)) + timeout;
 }
 
 TimerNode::~TimerNode() {
-  // if(SPHttpData) SPHttpData->handleClose();
+  if (SPHttpData) SPHttpData->handleClose();
 }
 
 TimerNode::TimerNode(TimerNode &tn)
@@ -41,7 +42,7 @@ TimerManager::~TimerManager() {}
 void TimerManager::addTimer(std::shared_ptr<HttpData> SPHttpData, int timeout) {
   SPTimerNode new_node(new TimerNode(SPHttpData, timeout));
   timerNodeQueue.push(new_node);
-  //  SPHttpData->linkTimer(new_node);
+  SPHttpData->linkTimer(new_node);
 }
 /* 处理逻辑是这样的~
 因为
@@ -57,7 +58,7 @@ void TimerManager::addTimer(std::shared_ptr<HttpData> SPHttpData, int timeout) {
 */
 void TimerManager::handleExpiredEvent() { //处理已过期的定时器事件。
   while (!timerNodeQueue.empty()) { //只会查看队头
-    auto ptimer_now = timerNodeQueue.top();
+    SPTimerNode ptimer_now = timerNodeQueue.top();
     if (ptimer_now->isDeleted()) {
       timerNodeQueue.pop(); // 如果被删除了，则弹出
     } else if (ptimer_now->isValid() == false) { // 超时失效

@@ -1,13 +1,19 @@
-//
-// Created by chao on 23-5-25.
-//
 
 #include "Epoll.h"
-
 #include <assert.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <string.h>
 #include <sys/epoll.h>
-
+#include <sys/socket.h>
+#include <deque>
+#include <queue>
+#include "Util.h"
 #include "base/Logger.h"
+
+
+#include <arpa/inet.h>
+#include <iostream>
 const int EVENTSNUM = 4096;
 const int EPOLLWAIT_TIME = 10000;
 Epoll::Epoll() : epollFd_(epoll_create1(EPOLL_CLOEXEC)), events_(EVENTSNUM) {
@@ -45,19 +51,12 @@ void Epoll::epoll_mod(const SP_Channel &request, int timeout) {
     }
   }
 }
-void Epoll::add_timer(SP_Channel request_data, int timeout) {
-  std::shared_ptr<HttpData> t = request_data->getHolder();
-  if (t)
-    timerManager_.addTimer(t, timeout);
-  else
-    LOG << "timer add fail";
-}
 
 void Epoll::epoll_del(const SP_Channel &request) {  //删除绑定的事件
   int fd = request->get_fd();
   struct epoll_event event;  // 用于表示一个epoll事件。
   event.data.fd = fd;
-  event.events = request->getEvents();
+  event.events = request->getLastEvents();
   if (epoll_ctl(epollFd_, EPOLL_CTL_DEL, fd, &event) < 0) {
     perror("epoll_del error");
   }
@@ -74,8 +73,9 @@ std::vector<SP_Channel> Epoll::poll() {
     if (req_data.size() > 0) return req_data;
   }
 }
+void Epoll::handleExpired() { timerManager_.handleExpiredEvent(); }
 // 分发处理函数
-std::vector<std::shared_ptr<Channel>> Epoll::getEventsRequest(int events_num) {
+std::vector<SP_Channel> Epoll::getEventsRequest(int events_num) {
   std::vector<SP_Channel> req_data;  // 存储事件产生的Channel对象
   for (int i = 0; i < events_num; ++i) {
     // 获取有事件产生的描述符
@@ -92,4 +92,10 @@ std::vector<std::shared_ptr<Channel>> Epoll::getEventsRequest(int events_num) {
   return req_data;  // 返回有事件产生的Channel对象
 }
 
-void Epoll::handleExpired() { timerManager_.handleExpiredEvent(); }
+void Epoll::add_timer(SP_Channel request_data, int timeout) {
+  std::shared_ptr<HttpData> t = request_data->getHolder();
+  if (t)
+    timerManager_.addTimer(t, timeout);
+  else
+    LOG << "timer add fail";
+}

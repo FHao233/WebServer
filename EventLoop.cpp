@@ -72,6 +72,7 @@ EventLoop::EventLoop()
     : is_looping_(false),
       poller_(new Epoll()),
       event_fd_(CreateEventfd()),
+      is_stop_(false),
       is_event_handling_(false),
       is_calling_pending_functions_(false),
       thread_id_(CurrentThread::tid()),

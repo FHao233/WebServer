@@ -1,8 +1,16 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include <unistd.h>
+
+#include <deque>
 #include <memory>
 #include <queue>
+
+#include "HttpData.h"
+#include "base/MutexLock.h"
+#include "base/noncopyable.h"
+
 class HttpData;
 
 /**
