@@ -4,6 +4,16 @@
 
 #include "Channel.h"
 
+#include <unistd.h>
+#include <cstdlib>
+#include <iostream>
+
+#include <queue>
+
+#include "Epoll.h"
+#include "EventLoop.h"
+#include "Util.h"
+
 Channel::Channel(EventLoop *loop)
     : loop_(loop), events_(0), last_events_(0), fd_(0) {}
 Channel::Channel(EventLoop *loop, int fd)
@@ -12,8 +22,7 @@ Channel::~Channel() {
   // loop_->poller_->epoll_del(fd, events_);
   // close(fd_);
 }
-// int Channel::get_fd() { return fd_; }
-// void Channel::set_fd(int fd) { fd_ = fd; }
+
 void Channel::HandleEvents()  //这段代码实现了 Channel 类的事件处理函数
                               //HandleEvents()，用于处理 epoll 监听到的事件。
 {

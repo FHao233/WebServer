@@ -13,7 +13,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "base/Timer.h"
+#include "Timer.h"
 class EventLoop;
 class TimerNode;
 class Channel;
@@ -94,8 +94,10 @@ class HttpData
     : public std::enable_shared_from_this<
           HttpData> {  // 解决对象自身需要获取自己的shared_ptr的问题。
  public:
-  HttpData(EventLoop *loop, int connfd);  // 构造函数，创建HttpData对象  ~HttpData() { close(fd_); }  // 析构函数，关闭连接
-  void reset();  // 重置HttpData对象
+  HttpData(EventLoop *loop,
+           int connfd);  // 构造函数，创建HttpData对象  ~HttpData() {
+                         // close(fd_); }  // 析构函数，关闭连接
+  void reset();          // 重置HttpData对象
   void seperateTimer();  // 分离定时器
   void linkTimer(std::shared_ptr<TimerNode> mtimer) {  // 关联定时器
     // shared_ptr重载了bool, 但weak_ptr没有
@@ -103,33 +105,33 @@ class HttpData
   }
   std::shared_ptr<Channel> getChannel() { return channel_; }  // 获取Channel对象
   EventLoop *getLoop() { return loop_; }  // 获取EventLoop对象
-  void handleClose();  // 处理连接关闭事件
-  void newEvent();  // 处理新事件
+  void handleClose();                     // 处理连接关闭事件
+  void newEvent();                        // 处理新事件
 
  private:
-  EventLoop *loop_;  // EventLoop对象指针
-  std::shared_ptr<Channel> channel_;  // Channel对象指针
-  int fd_;  // 连接文件描述符
-  std::string inBuffer_;  // 输入缓冲区
-  std::string outBuffer_;  // 输出缓冲区
-  bool error_;  // 是否出错
-  ConnectionState connectionState_;  // 连接状态
-  HttpMethod method_;  // HTTP请求方法
-  HttpVersion HTTPVersion_;  // HTTP版本
-  std::string fileName_;  // 文件名
-  std::string path_;  // 文件路径
-  int nowReadPos_;  // 当前读取位置
-  ProcessState state_;  // 处理状态
-  ParseState hState_;  // 解析状态
-  bool keepAlive_;  // 是否保持连接
+  EventLoop *loop_;                             // EventLoop对象指针
+  std::shared_ptr<Channel> channel_;            // Channel对象指针
+  int fd_;                                      // 连接文件描述符
+  std::string inBuffer_;                        // 输入缓冲区
+  std::string outBuffer_;                       // 输出缓冲区
+  bool error_;                                  // 是否出错
+  ConnectionState connectionState_;             // 连接状态
+  HttpMethod method_;                           // HTTP请求方法
+  HttpVersion HTTPVersion_;                     // HTTP版本
+  std::string fileName_;                        // 文件名
+  std::string path_;                            // 文件路径
+  int nowReadPos_;                              // 当前读取位置
+  ProcessState state_;                          // 处理状态
+  ParseState hState_;                           // 解析状态
+  bool keepAlive_;                              // 是否保持连接
   std::map<std::string, std::string> headers_;  // HTTP头部信息
-  std::weak_ptr<TimerNode> timer_;  // 定时器指针
-  void handleRead();  // 处理读事件
-  void handleWrite();  // 处理写事件
-  void handleConn();  // 处理连接事件
+  std::weak_ptr<TimerNode> timer_;              // 定时器指针
+  void handleRead();                            // 处理读事件
+  void handleWrite();                           // 处理写事件
+  void handleConn();                            // 处理连接事件
   void handleError(int fd, int err_num, std::string short_msg);  // 处理错误事件
-  URIState parseURI();  // 解析URI
-  HeaderState parseHeaders();  // 解析HTTP头部信息
+  URIState parseURI();                                           // 解析URI
+  HeaderState parseHeaders();       // 解析HTTP头部信息
   AnalysisState analysisRequest();  // 分析HTTP请求
 };
 

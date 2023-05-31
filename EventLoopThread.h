@@ -15,12 +15,10 @@ class EventLoopThread : noncopyable {
  public:
   EventLoopThread();
   ~EventLoopThread();
-  EventLoop*
-  startLoop();  // startLoop()方法会启动一个新线程，并在该线程中创建一个EventLoop对象，然后返回该对象的指针。
+  EventLoop* startLoop();  // startLoop()方法会启动一个新线程，并在该线程中创建一个EventLoop对象，然后返回该对象的指针。
 
  private:
-  void
-  threadFunc();  //该类的threadFunc()方法是新线程的入口函数，它会在新线程中运行EventLoop循环。
+  void threadFunc();  //该类的threadFunc()方法是新线程的入口函数，它会在新线程中运行EventLoop循环。
   EventLoop* loop_;
   bool exiting_;
   Thread thread_;

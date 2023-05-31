@@ -1,17 +1,14 @@
-#include <unistd.h>
-
-#include <iostream>
-
 #include <getopt.h>
+
 #include <string>
+
 #include "EventLoop.h"
 #include "Server.h"
 #include "base/Logger.h"
 
-
 int main(int argc, char *argv[]) {
   int threadNum = 4;
-  int port = 8081;
+  int port = 8082;
 
   std::string logPath = "./WebServer.log";
   // parse args
@@ -49,9 +46,9 @@ int main(int argc, char *argv[]) {
 #ifndef _PTHREADS
   LOG << "_PTHREADS is not defined !";
 #endif
- EventLoop mainLoop;
-Server myHTTPServer(&mainLoop, threadNum, port);
-myHTTPServer.start();
-mainLoop.Loop();
-return 0;
+  EventLoop mainLoop;
+  Server myHTTPServer(&mainLoop, threadNum, port);
+  myHTTPServer.start();
+  mainLoop.Loop();
+  return 0;
 }

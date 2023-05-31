@@ -24,8 +24,9 @@ set(SRCS
     main.cpp
     Server.cpp
     # ThreadPool.cpp
-    # Timer.cpp
+    Timer.cpp
     Util.cpp
+    
 )
 include_directories(${PROJECT_SOURCE_DIR}/base)
 
@@ -35,4 +36,6 @@ add_executable(WebServer ${SRCS})
 target_link_libraries(WebServer libserver_base)
 
 add_subdirectory(base)
+
+# add_executable(test test.cpp)
 # add_subdirectory(tests)

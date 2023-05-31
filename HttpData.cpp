@@ -157,26 +157,27 @@ void HttpData::seperateTimer() {
   }
 }
 /**
- * 这段代码实现了 HttpData 类的读事件处理函数 handleRead()，用于处理 HTTP
- 请求的读取和解析。 首先获取 channel_ 对应的事件类型 events_，然后进入一个
- do-while 循环，环中进行以下操作： 定义一个布尔变量
- zero，用于标记是否读到了文件结尾； 调用 readn()读取数据到 inBuffer_
- 中，并将读取的数据长度保存到 read_num 中； 如果当前连接状态为
- H_DISCONNECTING，则清空 inBuffer_ 并跳出循环； 如果读取数据出错，则设置 error_
- 为 true，调用 handleError() 处理错误，并跳出循环；
-    如果读取到了文件结尾，则将连接状态设置为
- H_DISCONNECTING，如果读取的数据长度为 0，则跳出循环； 如果当前状态为
- STATE_PARSE_URI，则调用 parseURI() 函数解析 URI，根据返回值进行相应的处理；
-    如果当前状态为 STATE_PARSE_HEADERS，则调用 parseHeaders()
- 函数解析请求头，根据返回值进行相应的处理； 如果当前方法为 POST，则将状态设置为
- STATE_RECV_BODY； 如果当前状态为 STATE_RECV_BODY，则根据请求头中的
- Content-length 字段判断是否已经接收完整个请求体，如果没有则跳出循环；
-    如果当前状态为 STATE_ANALYSIS，则调用 analysisRequest()
- 函数分析请求，根据返回值进行相应的处理； 如果以上操作都没有出错且当前状态为
- STATE_FINISH，则重置 HttpData 对象并继续处理 inBuffer_ 中剩余的数据；
-    如果以上操作都没有出错且连接状态不为 H_DISCONNECTED，则将 events_ 的 EPOLLIN
- 位置为 1。 最后，如果没有出错且 outBuffer_ 中有数据，则调用 handleWrite()
- 函数处理写事件。
+ *
+这段代码实现了 HttpData 类的读事件处理函数 handleRead()，用于处理 HTTP
+请求的读取和解析。 首先获取 channel_ 对应的事件类型 events_，然后进入一个
+do-while 循环，环中进行以下操作： 定义一个布尔变量
+zero，用于标记是否读到了文件结尾； 调用 readn()读取数据到 inBuffer_
+中，并将读取的数据长度保存到 read_num 中；
+如果当前连接状态为H_DISCONNECTING，则清空 inBuffer_ 并跳出循环；
+如果读取数据出错，则设置 error_为 true，调用 handleError()
+处理错误，并跳出循环； 如果读取到了文件结尾，则将连接状态设置为H_DISCONNECTING，
+如果读取的数据长度为 0，则跳出循环；
+如果当前状态为STATE_PARSE_URI，则调用 parseURI() 函数解析
+URI，根据返回值进行相应的处理； 如果当前状态为 STATE_PARSE_HEADERS，则调用
+parseHeaders()函数解析请求头，根据返回值进行相应的处理； 如果当前方法为
+POST，则将状态设置为STATE_RECV_BODY； 如果当前状态为
+STATE_RECV_BODY，则根据请求头中的 Content-length
+字段判断是否已经接收完整个请求体， 如果没有则跳出循环； 如果当前状态为
+STATE_ANALYSIS，则调用 analysisRequest()函数分析请求，根据返回值进行相应的处理；
+如果以上操作都没有出错且当前状态为STATE_FINISH，则重置 HttpData 对象并继续处理
+inBuffer_ 中剩余的数据； 如果以上操作都没有出错且连接状态不为
+H_DISCONNECTED，则将 events_ 的 EPOLLIN位置为 1。 最后，如果没有出错且
+outBuffer_ 中有数据，则调用 handleWrite()函数处理写事件。
 */
 // 处理读事件
 void HttpData::handleRead() {
@@ -295,7 +296,7 @@ void HttpData::handleRead() {
 }
 void HttpData::handleWrite() {
   if (!error_ && connectionState_ != H_DISCONNECTED) {
-    auto &events_ = channel_->getEvents();  // 获取 channel 对应的事件类型
+    __uint32_t &events_ = channel_->getEvents();  // 获取 channel 对应的事件类型
     if (writen(fd_, outBuffer_) <
         0) {  // 将 outBuffer_ 中的数据写入 fd_ 中，如果出错则设置 error_ 为
               // true，将 events_ 置为 0，并记录错误信息
@@ -310,8 +311,8 @@ void HttpData::handleWrite() {
 }
 
 void HttpData::handleConn() {
-  seperateTimer();                        // 分离定时器
-  auto &events_ = channel_->getEvents();  // 获取 channel 对应的事件类型
+  seperateTimer();                              // 分离定时器
+  __uint32_t &events_ = channel_->getEvents();  // 获取 channel 对应的事件类型
   if (!error_ && connectionState_ ==
                      H_CONNECTED) {  // 如果没有出错且连接状态为 H_CONNECTED
     if (events_ != 0) {              // 如果 events_ 不为 0
@@ -336,18 +337,26 @@ void HttpData::handleConn() {
       events_ |= (EPOLLIN | EPOLLET);
       int timeout = DEFAULT_KEEP_ALIVE_TIME;
       loop_->PollerMod(channel_, timeout);
-    }
-    //这句话的意思是，如果 error_ 为假且 connectionState_ 等于
-    // H_DISCONNECTING，并且 events_ 中包含 EPOLLOUT
-    // 事件，则条件成立其中，error_ 表示是否发生错误，connectionState_
-    //表示连接状态，H_DISCONNECTING 表示正在关闭连接，events_
-    //表示文件描述符上的事件类型。如果这些条件都满足，那么这个条件就成立，可以执行相应的操作。这个条件通常用于处理关闭连接时的事件，例如发送完所有数据后关闭连接。
-    else if (!error_ && connectionState_ == H_DISCONNECTING &&
-             (events_ & EPOLLOUT)) {
-      events_ = (EPOLLOUT | EPOLLET);
     } else {
-      loop_->RunInLoop(bind(&HttpData::handleClose, shared_from_this()));
+      // cout << "close normally" << endl;
+      // loop_->shutdown(channel_);
+      // loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
+      events_ |= (EPOLLIN | EPOLLET);
+      // events_ |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
+      int timeout = (DEFAULT_KEEP_ALIVE_TIME >> 1);
+      loop_->PollerMod(channel_, timeout);
     }
+  }
+  //这句话的意思是，如果 error_ 为假且 connectionState_ 等于
+  // H_DISCONNECTING，并且 events_ 中包含 EPOLLOUT
+  // 事件，则条件成立其中，error_ 表示是否发生错误，connectionState_
+  //表示连接状态，H_DISCONNECTING 表示正在关闭连接，events_
+  //表示文件描述符上的事件类型。如果这些条件都满足，那么这个条件就成立，可以执行相应的操作。这个条件通常用于处理关闭连接时的事件，例如发送完所有数据后关闭连接。
+  else if (!error_ && connectionState_ == H_DISCONNECTING &&
+           (events_ & EPOLLOUT)) {
+    events_ = (EPOLLOUT | EPOLLET);
+  } else {
+    loop_->RunInLoop(bind(&HttpData::handleClose, shared_from_this()));
   }
 }
 /**
@@ -593,11 +602,14 @@ AnalysisState HttpData::analysisRequest() {
     // 头部结束
     header += "\r\n";
     outBuffer_ += header;  //头部添加到输出缓冲区
-    if (method_ == METHOD_HEAD)
-      return ANALYSIS_SUCCESS;  // 如果是HEAD请求，直接返回
-    int src_fd = open(
-        fileName_.c_str(), O_RDONLY,
-        0);  // 打开文件调用C语言中的open函数来打开文件，并将文件描述符存储在src_fd变量中
+    if (method_ == METHOD_HEAD)return ANALYSIS_SUCCESS;  // 如果是HEAD请求，直接返回
+    int src_fd = open(fileName_.c_str(), O_RDONLY, 0);  // 打开文件调用C语言中的open函数来打开文件，并将文件描述符存储在src_fd变量中
+
+    // int src_fd = open(
+    //   ("../resources/"+fileName_).c_str(), O_RDONLY,
+    //     0);  //
+    std::cout << "src_fd :" << src_fd  << std::endl;
+    //     打开文件调用C语言中的open函数来打开文件，并将文件描述符存储在src_fd变量中
     if (src_fd < 0) {  // 如果打开文件失败
       outBuffer_.clear();
       handleError(fd_, 404, "Not Found!");  // 处理404错误

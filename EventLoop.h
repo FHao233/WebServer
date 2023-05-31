@@ -1,5 +1,4 @@
-//
-// Created by chao on 23-5-25.
+
 //
 
 #ifndef WEBSERVER_EVENTLOOP_H
@@ -19,7 +18,6 @@
 
 #include <iostream>
 using namespace std;
-// typedef std::shared_ptr<Channel> SP_Channel;
 class EventLoop {
  public:
   // 初始化poller, event_fd，给 event_fd 注册到 epoll 中并注册其事件处理回调

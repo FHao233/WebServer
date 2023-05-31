@@ -18,7 +18,7 @@ EventLoopThread::~EventLoopThread() {
   }
 }
 
-EventLoop *EventLoopThread::startLoop() {
+EventLoop* EventLoopThread::startLoop() {
   assert(!thread_.started()); // 断言线程未启动
   thread_.start();// 启动线程
   {
