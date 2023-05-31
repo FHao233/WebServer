@@ -33,8 +33,8 @@ class Epoll {
   void epoll_del(const SP_Channel &request);
 
   //   void poll(std::vector<SP_Channel> &req);
-  std::vector<SP_Channel> poll();
-  std::vector<SP_Channel> getEventsRequest(int events_num);
+std::vector<std::shared_ptr<Channel>> poll();
+  std::vector<std::shared_ptr<Channel>> getEventsRequest(int events_num); 
   int getEpollFd() { return epollFd_; }
   void handleExpired();
   Epoll();

@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
   int threadNum = 4;
-  int port = 8081;
+  int port = 8082;
 
   std::string logPath = "./WebServer.log";
   // parse args

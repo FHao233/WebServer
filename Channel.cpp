@@ -22,23 +22,7 @@ Channel::~Channel() {
   // loop_->poller_->epoll_del(fd, events_);
   // close(fd_);
 }
-void Channel::HandleRead() {
-  if (read_handler_) {
-    read_handler_();
-  }
-}
 
-void Channel::HandleWrite() {
-  if (write_handler_) {
-    write_handler_();
-  }
-}
-
-void Channel::HandleConn() {
-  if (conn_handler_) {
-    conn_handler_();
-  }
-}
 void Channel::HandleEvents()  //这段代码实现了 Channel 类的事件处理函数
                               //HandleEvents()，用于处理 epoll 监听到的事件。
 {
@@ -65,4 +49,21 @@ void Channel::HandleEvents()  //这段代码实现了 Channel 类的事件处理
     HandleWrite();
   }
   HandleConn();  // 最后调用 HandleConn() 处理连接事件。
+}
+void Channel::HandleRead() {
+  if (read_handler_) {
+    read_handler_();
+  }
+}
+
+void Channel::HandleWrite() {
+  if (write_handler_) {
+    write_handler_();
+  }
+}
+
+void Channel::HandleConn() {
+  if (conn_handler_) {
+    conn_handler_();
+  }
 }

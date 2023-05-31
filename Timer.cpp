@@ -2,15 +2,18 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <queue>
+#include <iostream>
 TimerNode::TimerNode(std::shared_ptr<HttpData> requestData, int timeout)
     : deleted_(false), SPHttpData(requestData) {
   struct timeval now;
-  gettimeofday(&now, NULL); // 获取当前时间
+  gettimeofday(&now, NULL);
   // 以毫秒计
-  (((now.tv_sec % 10000) * 1000) + (now.tv_usec / 1000)) + timeout;
+  expiredTime_ =
+      (((now.tv_sec % 10000) * 1000) + (now.tv_usec / 1000)) + timeout;
 }
 
 TimerNode::~TimerNode() {
+  std::cout << "TimerNode 析构~" << std::endl;
   if (SPHttpData) SPHttpData->handleClose();
 }
 

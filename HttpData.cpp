@@ -606,8 +606,9 @@ AnalysisState HttpData::analysisRequest() {
     int src_fd = open(fileName_.c_str(), O_RDONLY, 0);  // 打开文件调用C语言中的open函数来打开文件，并将文件描述符存储在src_fd变量中
 
     // int src_fd = open(
-    //   ("/resources/"+fileName_).c_str(), O_RDONLY,
+    //   ("../resources/"+fileName_).c_str(), O_RDONLY,
     //     0);  //
+    std::cout << "src_fd :" << src_fd  << std::endl;
     //     打开文件调用C语言中的open函数来打开文件，并将文件描述符存储在src_fd变量中
     if (src_fd < 0) {  // 如果打开文件失败
       outBuffer_.clear();

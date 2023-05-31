@@ -51,6 +51,14 @@ void Epoll::epoll_mod(const SP_Channel &request, int timeout) {
     }
   }
 }
+void Epoll::add_timer(SP_Channel request_data, int timeout) {
+  std::shared_ptr<HttpData> t = request_data->getHolder();
+  if (t)
+    timerManager_.addTimer(t, timeout);
+  else
+    LOG << "timer add fail";
+}
+
 
 void Epoll::epoll_del(const SP_Channel &request) {  //删除绑定的事件
   int fd = request->get_fd();
@@ -92,10 +100,3 @@ std::vector<SP_Channel> Epoll::getEventsRequest(int events_num) {
   return req_data;  // 返回有事件产生的Channel对象
 }
 
-void Epoll::add_timer(SP_Channel request_data, int timeout) {
-  std::shared_ptr<HttpData> t = request_data->getHolder();
-  if (t)
-    timerManager_.addTimer(t, timeout);
-  else
-    LOG << "timer add fail";
-}
